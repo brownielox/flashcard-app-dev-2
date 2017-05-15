@@ -13,3 +13,24 @@
  *= require_tree .
  *= require_self
  */
+
+ h3
+{
+    text-decoration: none;
+    color: transparent;
+}
+
+h3:hover
+{
+    color: black;
+}
+/*
+h2
+{
+    color: black;
+}
+h2:hover
+{
+    text-decoration: none;
+    color: transparent;
+}*/
