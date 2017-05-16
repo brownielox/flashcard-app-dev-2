@@ -9,4 +9,7 @@ class SubjectsController < ApplicationController
     @subject = Subject.find(params[:id])
   end
 
+  def new
+  end
+
 end

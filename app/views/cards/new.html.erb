@@ -1,10 +1,14 @@
-<h1>New Card!!</h1>
+<h1>Make a new card</h1>
 
 <%= form_for :card, url: cards_path do |f| %>
-  <p>
-    <%= f.label :subject_name %><br>
-    <%= f.text_field :subject_name %>
-  </p>
+<%= f.label :subject %><br>
+    <%= f.text_field :subject_name, list: "subjects_autocomplete" %>
+    <br>
+    <datalist id="subjects_autocomplete">
+      <%= Subject.all.each do |subject| %>
+        <option value="<%= subject.name %>">
+      <% end %>
+    </datalist>
 
   <p>
     <%= f.label :front %><br>
