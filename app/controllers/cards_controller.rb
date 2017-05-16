@@ -38,7 +38,4 @@ class CardsController < ApplicationController
       params.require(:card).permit(:subject_name, :front, :back)
     end
 
-    def require_login
-      return head(:forbidden) unless session.include? :user_id
-    end
 end
