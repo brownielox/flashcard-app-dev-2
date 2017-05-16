@@ -1,5 +1,7 @@
 <h2><%= @card.front %></h2>
 <h3><%= @card.back %></h3>
 
+<%= link_to 'Next Card', card_path(@card.next) %>
+
 <%= render 'links' %>
 _______________________________________________

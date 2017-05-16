@@ -8,6 +8,8 @@ class CardsController < ApplicationController
 
   def show
     @card = Card.find(params[:id])
+    @next = Card.where('id > ?', @card.id).first
+    @next = Card.first if @next.nil?
   end
 
   def new
