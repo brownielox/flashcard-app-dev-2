@@ -5,10 +5,14 @@ class Card < ApplicationRecord
     self.subject = Subject.find_or_create_by(name: name)
   end
 
-  def next
-    next_card = Card.where('id > ?', self.id).first
-    next_card = Card.first if next_card.blank?
-    next_card
+  def user_name=(user)
+    self.user = User.find_or_create_by(email: email)
   end
 
+  def next
+    next_card = Card.where('id > ?', self.subject_id).first
+    last_card = Card.where('id > ?', self.subject_id).last
+    next_card = Card.where('id > ?', self.subject_id).first if next_card == last_card
+    next_card
+  end
 end
