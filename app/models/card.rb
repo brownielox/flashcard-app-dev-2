@@ -11,9 +11,10 @@ class Card < ApplicationRecord
   end
 
   def next
-    next_card = Card.where('id > ?', self.subject_id).first
-    last_card = Card.where('id > ?', self.subject_id).last
-    next_card = Card.where('id > ?', self.subject_id).first if next_card == last_card
-    next_card
+    Card.where("id > ?", id).order("id ASC").first || Card.first
+  end
+
+  def previous
+    Card.where("id < ?", id).order("id DESC").first || Card.last
   end
 end
