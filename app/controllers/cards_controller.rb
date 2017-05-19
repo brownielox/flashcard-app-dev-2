@@ -34,7 +34,7 @@ class CardsController < ApplicationController
 
   private
     def card_params
-      params.require(:card).permit(:subject_name, :front, :back)
+      params.require(:card).permit(:subject_id, :front, :back)
     end
 
 end
