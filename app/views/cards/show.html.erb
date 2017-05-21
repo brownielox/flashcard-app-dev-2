@@ -4,6 +4,7 @@ _______________________________________________
 <h2><%= @card.front %></h2>
 <h3><%= @card.back %></h3>
 
+<%= link_to 'Previous Card', card_path(@card.previous) %>
 <%= link_to 'Next Card', card_path(@card.next) %><br>
 _______________________________________________
 

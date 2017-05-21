@@ -1,5 +1,5 @@
 class Card < ApplicationRecord
-  validates :front, :back, presence: true, :uniqueness => true
+  validates :front, :back, :user_id, presence: true, uniqueness: true
 
     belongs_to :user
     belongs_to :subject
@@ -9,11 +9,13 @@ class Card < ApplicationRecord
   end
 
   def next
-    Card.where("id > ?", id).order("id ASC").first || Card.first
+    current_cards = self.subject.cards
+    current_cards.where("id > ?", id).first || current_cards.first
   end
 
   def previous
-    Card.where("id < ?", id).order("id DESC").first || Card.last
+    current_cards = self.subject.cards
+    current_cards.where("id < ?", id).first || current_cards.last
   end
 
 end

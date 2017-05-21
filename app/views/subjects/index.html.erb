@@ -1,9 +1,9 @@
 <h1><%="#{current_user.email}"%>'s subjects</h1>
 <ul>
   <% @subjects.each do |s| %>
-  <h2><%=  link_to "#{s.name}", card_path(s.cards.first) %></h2>
+  <h2><%= link_to "#{s.name}", subject_cards_path(s) %></h2>
 _______________________________________________
 
   <% end %>
 </ul>
-<%= link_to = button_to('New Subject', new_card_path) %>
+<%= link_to = button_to('New Card', new_card_path, :method => :post ) %>

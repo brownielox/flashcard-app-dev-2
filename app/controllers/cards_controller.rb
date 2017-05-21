@@ -2,7 +2,7 @@ class CardsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @cards = Card.all
+    @subject = Subject.find(params[:subject_id])
   end
 
   def show
@@ -20,7 +20,7 @@ class CardsController < ApplicationController
     @card = Card.create(card_params)
     @card.user_id = current_user.id
     @card.save
-    redirect_to @card
+    redirect_to new_card_path
   end
 
   def update

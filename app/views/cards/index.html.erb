@@ -1,1 +1,10 @@
-I am the card index.
+<h2><% @subject.cards.each do |c| %></h2>
+_______________________________________________
+
+<h2><%= c.front %></h2>
+<h3><%= c.back %></h3>
+_______________________________________________<br><br>
+<% end %>
+  <%= link_to = button_to('Study!', subject_card_path()) %>
+  <%= link_to = button_to('New Card', new_card_path, :method => :post ) %>
+  <%= link_to = button_to('All Subjects', subjects_path, :method => :post ) %>
