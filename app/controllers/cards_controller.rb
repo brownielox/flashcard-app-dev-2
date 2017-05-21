@@ -17,7 +17,8 @@ class CardsController < ApplicationController
   end
 
   def create
-    @card = Card.new(card_params)
+    @card = Card.create(card_params)
+    @card.user_id = current_user.id
     @card.save
     redirect_to @card
   end
@@ -34,7 +35,7 @@ class CardsController < ApplicationController
 
   private
     def card_params
-      params.require(:card).permit(:subject_id, :front, :back)
+      params.require(:card).permit(:subject_name, :front, :back, :user_id)
     end
 
 end

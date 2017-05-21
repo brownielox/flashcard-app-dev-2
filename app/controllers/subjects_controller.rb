@@ -2,7 +2,7 @@ class SubjectsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @subjects = Subject.where(:user_id => current_user.id)
+    @subjects = User.find_by_id(current_user.id).subjects
   end
 
   def show
@@ -19,6 +19,21 @@ class SubjectsController < ApplicationController
   end
 
   def new
+  end
+
+  def cards_index
+    @subject = Subject.find(params[:id])
+    @cards = @subject.cards
+    render template: 'cards/index'
+  end
+
+  def cards
+    @subject = Subject.find(params[:id])
+
+    # Note that because ids are unique by table we can go directly to
+    # Post.find — no need for @author.posts.find...
+    @card = Card.find(params[:card_id])
+    render template: 'cards/show'
   end
 
   private

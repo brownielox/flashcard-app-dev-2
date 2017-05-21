@@ -1,8 +1,14 @@
 <h1>Make a new card</h1>
 
-<h1>Hello, <%="#{current_user.id}"%></h1>
 <%= form_for :card, url: cards_path do |f| %>
-<%= f.collection_select :subject_id, Subject.all, :id, :name %><br>
+  <%= f.label :subject %><br>
+    <%= f.text_field :subject_name, list: "subjects_autocomplete" %>
+    <br>
+    <datalist id="subjects_autocomplete">
+      <%= Subject.all.each do |subject| %>
+        <option value="<%= subject.name %>">
+      <% end %>
+  </datalist>
 
     <%= f.label :front %><br>
     <%= f.text_area :front %>

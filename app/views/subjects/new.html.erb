@@ -1,14 +1,6 @@
 <%= form_for :subject, url: subjects_path do |f| %>
-  <%= f.label :subject %><br>
-    <%= f.text_field :name, list: "subjects_autocomplete" %>
-    <br>
-    <datalist id="subjects_autocomplete">
-      <%= Subject.all.each do |subject| %>
-        <option value="<%= subject.name %>">
-
-      <% end %>
-
-    </datalist>
-                        <%= f.submit %>
+  <%= f.label :name %><br>
+  <%= f.text_field :name %>
+      <%= f.submit %>
     <p>
 <% end %>

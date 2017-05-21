@@ -1,4 +1,6 @@
 class Subject < ApplicationRecord
-    has_many :cards
-  belongs_to :user
+  validates :name, presence: true, :uniqueness => true
+
+  has_many :cards
+
 end
