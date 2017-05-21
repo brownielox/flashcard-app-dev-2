@@ -1,5 +1,5 @@
 class Card < ApplicationRecord
-  validates :front, :back, :user_id, presence: true, uniqueness: true
+  validates :front, presence: true, uniqueness: true
 
     belongs_to :user
     belongs_to :subject

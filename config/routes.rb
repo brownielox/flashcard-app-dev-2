@@ -14,5 +14,4 @@ Rails.application.routes.draw do
   post 'subjects/new' => 'subjects#new'
   post 'cards/new' => 'cards#new'
   post 'subjects' => 'subjects#index'
-
 end
