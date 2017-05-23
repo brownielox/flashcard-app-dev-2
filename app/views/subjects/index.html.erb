@@ -2,7 +2,7 @@
 <br>
 <%= render 'nav' %>
 
-<h1><%="#{current_user.email}"%>'s subjects</h1>
+<h2><%="#{current_user.email}"%>'s subjects</h2>
 <ul>
   <% @subjects.uniq.each do |s| %>
   <h2><%= link_to "#{s.name}", subject_cards_path(s) %></h2>

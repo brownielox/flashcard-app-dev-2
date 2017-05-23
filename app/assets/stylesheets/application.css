@@ -71,6 +71,29 @@
   color: white;
   padding-top: 2px;
 }
+
+.navbar1
+{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  margin: 0;
+  background-color: grey;
+  left: 0;
+  height: 25px;
+}
+
+.navbar1 a:first-child
+{
+  position: fixed;
+  right: 20px;
+  color: white;
+  padding-top: 2px;
+}
+
+.links * {
+  display: inline-block;
+}
 /*
 h2
 {

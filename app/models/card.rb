@@ -8,6 +8,10 @@ class Card < ApplicationRecord
     self.subject = Subject.find_or_create_by(name: name)
   end
 
+  def random
+    self.subject.cards.sample
+  end
+
   def next
     current_cards = self.subject.cards
     current_cards.where("id > ?", id).first || current_cards.first
@@ -15,7 +19,7 @@ class Card < ApplicationRecord
 
   def previous
     current_cards = self.subject.cards
-    current_cards.where("id < ?", id).first || current_cards.last
+    current_cards.where("id < ?", id).last || current_cards.last
   end
 
 end

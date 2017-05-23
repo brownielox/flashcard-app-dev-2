@@ -2,7 +2,7 @@
 <br>
 <%= render 'nav' %>
 
-<h1>Edit or Delete Card</h1>
+<h2>Edit Card</h2>
 
 <%= form_for @card, url: {action: "update"} do |f| %>
   <% if @card.errors.any? %>

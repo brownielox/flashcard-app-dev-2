@@ -2,6 +2,8 @@
 <br>
 <%= render 'nav' %>
 
+<h2><%=@subject.name %> cards</h2>
+
 <h2><% @subject.cards.each do |c| %></h2>
 
 <div class="card_holder">
@@ -9,6 +11,7 @@
   <h3><%= c.back %></h3>
 </div>
 <% end %>
-  <%= link_to = button_to('Study!', subject_card_path(@subject.id, @subject.cards.first.id), :method => :get) %>
+<br>
+<br>
+  <%= link_to 'Study!', subject_card_path(@subject.id, @subject.cards.first.id), :method => :get %><br><br>
   <%= link_to = button_to('New Card', new_card_path, :method => :post) %>
-  <%= link_to 'All Subjects', subjects_path %>

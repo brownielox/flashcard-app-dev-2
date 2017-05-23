@@ -10,8 +10,9 @@
 </div>
 <br>
 <br>
-<%= link_to 'Previous Card', card_path(@card.previous) %>
-<%= link_to 'Next Card', card_path(@card.next) %><br>
+<%= link_to 'Previous Card', subject_card_path(@subject.id, @card.previous) %>
+<%= link_to 'Next Card', subject_card_path(@subject.id, @card.next) %>
+<%= link_to 'Random Card', subject_card_path(@subject.id, @card.random) %><br>
 <br>
 
 <%= render 'links' %>
