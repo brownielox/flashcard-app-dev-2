@@ -13,16 +13,63 @@
  *= require_tree .
  *= require_self
  */
+ a {
+   text-decoration: none;
+ }
+
+ a:hover {
+   text-decoration: underline;
+ }
 
  h3
 {
     text-decoration: none;
     color: transparent;
+    font-weight: normal;
 }
 
-h3:hover
+.card_holder
+{
+    width: 250px;
+    border: 5px solid black;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.card_holder h2, .card_holder h3
+{
+    text-align: center;
+}
+
+.card_holder:hover h3
 {
     color: black;
+}
+
+.navbar
+{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  margin: 0;
+  background-color: grey;
+  left: 0;
+  height: 25px;
+}
+
+.navbar a:first-child{
+    position: fixed;
+    color: white;
+    padding-top: 2px;
+    left: 20px;
+}
+
+.navbar a:last-child
+{
+  position: fixed;
+  right: 20px;
+  color: white;
+  padding-top: 2px;
 }
 /*
 h2

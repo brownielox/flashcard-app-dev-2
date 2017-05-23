@@ -1,11 +1,17 @@
-<h2><%=@card.subject.name %></h2>
-_______________________________________________
+<br>
+<br>
+<%= render 'nav' %>
 
-<h2><%= @card.front %></h2>
-<h3><%= @card.back %></h3>
+<h2><%=@card.subject.name %> cards</h2>
 
+<div class="card_holder">
+  <h2><%= @card.front %></h2>
+  <h3><%= @card.back %></h3>
+</div>
+<br>
+<br>
 <%= link_to 'Previous Card', card_path(@card.previous) %>
 <%= link_to 'Next Card', card_path(@card.next) %><br>
-_______________________________________________
+<br>
 
 <%= render 'links' %>

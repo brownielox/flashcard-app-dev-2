@@ -1,10 +1,14 @@
-<h2><% @subject.cards.each do |c| %></h2>
-_______________________________________________
+<br>
+<br>
+<%= render 'nav' %>
 
-<h2><%= c.front %></h2>
-<h3><%= c.back %></h3>
-_______________________________________________<br><br>
+<h2><% @subject.cards.each do |c| %></h2>
+
+<div class="card_holder">
+  <h2><%= c.front %></h2>
+  <h3><%= c.back %></h3>
+</div>
 <% end %>
   <%= link_to = button_to('Study!', subject_card_path(@subject.id, @subject.cards.first.id), :method => :get) %>
   <%= link_to = button_to('New Card', new_card_path, :method => :post) %>
-  <%= link_to = button_to('All Subjects', subjects_path) %>
+  <%= link_to 'All Subjects', subjects_path %>
