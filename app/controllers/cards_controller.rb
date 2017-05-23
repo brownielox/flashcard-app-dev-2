@@ -33,6 +33,11 @@ class CardsController < ApplicationController
     end
   end
 
+  def destroy
+    @card = Card.find(params[:id]).destroy
+    redirect_to subjects_path
+  end
+
   private
     def card_params
       params.require(:card).permit(:subject_name, :front, :back, :user_id)

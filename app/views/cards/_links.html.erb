@@ -1,2 +1,3 @@
 <%= link_to = button_to('Edit Card', edit_card_path, :method => :get) %>
+<%= link_to = button_to('Delete Card', card_path(@card), :method => :delete, data: {confirm: "Are you sure you want to delete this card?"} ) %>
 <%= link_to ('Subjects', subjects_path) %>
