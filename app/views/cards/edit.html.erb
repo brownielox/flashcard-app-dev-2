@@ -4,7 +4,7 @@
 
 <h2>Edit Card</h2>
 
-<%= form_for @card, url: {action: "update"} do |f| %>
+<%= form_for @card do |f| %>
   <% if @card.errors.any? %>
     <div id="error_explanation">
        <h2>There were some errors:</h2>

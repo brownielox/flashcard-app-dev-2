@@ -5,13 +5,14 @@
 <h2><%=@subject.name %> cards</h2>
 
 <h2><% @subject.cards.each do |c| %></h2>
-
-<div class="card_holder">
-  <h2><%= c.front %></h2>
-  <h3><%= c.back %></h3>
-</div>
+    <% if c.user_id == current_user.id %>
+  <div class="card_holder">
+    <h2><%= c.front %></h2>
+    <h3><%= c.back %></h3>
+  </div>
+  <% end %>
 <% end %>
 <br>
 <br>
   <%= link_to 'Study!', subject_card_path(@subject.id, @subject.cards.first.id), :method => :get %><br><br>
-  <%= link_to = button_to('New Card', new_card_path, :method => :post) %>
+  <%= link_to = button_to('New Card', new_card_path) %>
