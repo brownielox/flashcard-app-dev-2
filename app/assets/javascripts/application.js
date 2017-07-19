@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require cards
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
