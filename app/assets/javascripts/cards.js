@@ -1,5 +1,7 @@
 $(document).ready(function() {
   attachListeners();
+    $("#front").show();
+    $("#back").hide();
 })
 
 function attachListeners() {
@@ -16,8 +18,13 @@ function attachListeners() {
       front_visible = true;
     }
   });
+}
 
-  // $('#save').click(function() {
-  //   saveGame();
-  // });
+function showCards() {
+  $.get("/cards", function(server_response){
+    server_response.forEach(function(card){
+      var c = `<div>${card.front}</div>`
+      $("")
+    })
+  };
 }

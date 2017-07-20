@@ -7,8 +7,8 @@
 <h2><% @subject.cards.each do |c| %></h2>
     <% if c.user_id == current_user.id %>
       <div class="card_holder">
-        <h2><%= c.front %></h2>
-        <h3><%= c.back %></h3>
+        <h2 id="front"><%= c.front %></h2>
+        <h2 id="back"><%= c.back %></h>
       </div>
       <% end %>
   <% end %>

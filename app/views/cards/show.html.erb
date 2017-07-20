@@ -5,14 +5,29 @@
 <h2><%=@card.subject.name %> cards</h2>
 
 <div class="card_holder">
-  <h2 id="front"><%= @card.front %></h2>
-  <h2 id="back"><%= @card.back %></h2>
+  <h2 id="front"><%= card.id.front %></h2>
+  <h2 id="back"><%= card.id.back %></h2>
 </div>
 <br>
 <br>
 <%= link_to 'Previous Card', subject_card_path(@subject.id, @card.previous) %>
-<%= link_to 'Next Card', subject_card_path(@subject.id, @card.next) %>
+<a href="#" class="js-next" data-id="<%=@post.id%>">Next...</a>
 <%= link_to 'Random Card', subject_card_path(@subject.id, @card.random) %><br>
 <br>
+
+<script type="text/javascript" charset="utf-8">
+$(function () {
+  $(".js-next").on("click", function() {
+    var nextId = parseInt($(".js-next").attr("data-id")) + 1;
+    $.get("/posts/" + nextId + "/post_data", function(data) {
+      $(".authorName").text(data["author"]["name"]);
+      $(".postTitle").text(data["title"]);
+      $(".postBody").text(data["description"]);
+      // re-set the id to current on the link
+      $(".js-next").attr("data-id", data["id"]);
+    });
+  });
+});
+</script>
 
 <%= render 'links' %>

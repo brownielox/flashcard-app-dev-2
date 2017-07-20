@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require cards
+//= require subjects
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .

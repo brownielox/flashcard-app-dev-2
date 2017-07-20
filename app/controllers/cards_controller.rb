@@ -2,12 +2,14 @@ class CardsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @subject = Subject.find(params[:subject_id])
+    subject = Subject.find(params[:id])
+    render json: CardSerializer.serialize(card)
   end
 
   def show
-    @card = Card.find(params[:id])
-    @subject = Subject.find(params[:subject_id])
+    subjects = Subject.all
+    card = Card.find(params[:id])
+    render json: card.to_json
   end
 
   def new
@@ -42,6 +44,11 @@ class CardsController < ApplicationController
   private
     def card_params
       params.require(:card).permit(:subject_name, :front, :back, :user_id)
+    end
+
+    def set_cards
+      @card = Card.find(params[:id])
+      @subject = Subject.find(params[:subject_id])
     end
 
 end
