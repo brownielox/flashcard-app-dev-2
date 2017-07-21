@@ -7,14 +7,15 @@ Rails.application.routes.draw do
     resources :cards, only: [:show, :index]
   end
 
+    root 'home#index'
 
   resources :cards, only: [:index, :show, :edit, :destroy, :new, :create, :update]
-
-  root 'subjects#index'
-  post 'subjects/new' => 'subjects#new'
-  post 'cards/new' => 'cards#new'
-  post 'subjects' => 'subjects#index'
-
-  get '/subjects/:id/cards', to: 'subjects#cards'
+  #
+  # root 'subjects#index'
+  # post 'subjects/new' => 'subjects#new'
+  # post 'cards/new' => 'cards#new'
+  # post 'subjects' => 'subjects#index'
+  #
+  # get 'cards/:id/card_data', to: 'cards#card_data'
 
 end

@@ -3,11 +3,17 @@ class CardsController < ApplicationController
 
   def index
     subject = Subject.find(params[:id])
+    card = Card.find(params[:id])
     render json: CardSerializer.serialize(card)
   end
 
   def show
     subjects = Subject.all
+    card = Card.find(params[:id])
+    render json: card.to_json
+  end
+
+  def card_data
     card = Card.find(params[:id])
     render json: card.to_json
   end

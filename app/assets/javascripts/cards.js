@@ -1,7 +1,9 @@
 $(document).ready(function() {
+  console.log("cards.js")
   attachListeners();
-    $("#front").show();
-    $("#back").hide();
+  $("#front").html("perro").show();
+  $("#back").html("dog").hide();
+
 })
 
 function attachListeners() {
@@ -26,5 +28,5 @@ function showCards() {
       var c = `<div>${card.front}</div>`
       $("")
     })
-  };
+  });
 }
