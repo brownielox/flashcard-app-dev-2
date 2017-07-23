@@ -7,8 +7,10 @@ Rails.application.routes.draw do
     resources :cards, only: [:show, :index]
   end
 
+    root 'home#index'
 
   resources :cards, only: [:index, :show, :edit, :destroy, :new, :create, :update]
+<<<<<<< HEAD
 
   root 'subjects#index'
   post 'subjects/new' => 'subjects#new'
@@ -17,5 +19,14 @@ Rails.application.routes.draw do
 
   resources :api, only: [:show]
 
+=======
+  #
+  # root 'subjects#index'
+  # post 'subjects/new' => 'subjects#new'
+  # post 'cards/new' => 'cards#new'
+  # post 'subjects' => 'subjects#index'
+  #
+  # get 'cards/:id/card_data', to: 'cards#card_data'
+>>>>>>> 89ad2d08f729e48c2332f513d3d38f223cab7333
 
 end
