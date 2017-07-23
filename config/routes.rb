@@ -15,5 +15,7 @@ Rails.application.routes.draw do
   post 'cards/new' => 'cards#new'
   post 'subjects' => 'subjects#index'
 
+  resources :api, only: [:show]
+
 
 end
