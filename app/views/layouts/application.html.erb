@@ -9,9 +9,9 @@
   </head>
 
   <body>
+    <%= yield %>
   </body>
   <footer>
-    <%= yield %>
 
 
     <%= content_tag(:div, flash[:error], :id => "flash_error") if flash[:error] %>

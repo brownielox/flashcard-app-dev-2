@@ -1,13 +1,11 @@
 <br>
+<div id="main">
+  "Hello World"
+</div>
 <br>
-<%= render 'nav' %>
+<!-- <%= render 'nav' %> -->
+<button id="subjects_button">See my subjects</button>
 
-<h2><%="#{current_user.email}"%>'s subjects</h2>
-<ul>
-  <% @subjects.uniq.each do |s| %>
-  <h2><%= link_to "#{s.name}", subject_cards_path(s) %></h2>
-_______________________________________________
 
-  <% end %>
-</ul>
+
 <%= link_to = button_to('New Card', new_card_path) %>

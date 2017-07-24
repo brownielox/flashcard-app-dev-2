@@ -2,15 +2,23 @@ class CardsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    subject = Subject.find(params[:id])
-    card = Card.find(params[:id])
-    render json: CardSerializer.serialize(card)
+    @cards = Subject.find(params[:subject_id]).cards
+    respond_to do |format|
+      format.html { render :index }
+      format.json { render json: @cards}
+    end
   end
 
   def show
-    subjects = Subject.all
-    card = Card.find(params[:id])
-    render json: card.to_json
+    # subjects = Subject.all
+    # card = Card.find(params[:id])
+    # render json: card.to_json
+    @subject = Subject.find(params[:subject_id])
+    @card = (Subject.find(params[:subject_id])).cards.find(params[:id])
+    respond_to do |format|
+      format.html { render :show }
+      format.json { render json: @card}
+    end
   end
 
   def card_data

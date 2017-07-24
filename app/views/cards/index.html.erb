@@ -2,9 +2,8 @@
 <br>
 <%= render 'nav' %>
 
-<h2><%=@subject.name %> cards</h2>
 
-<h2><% @subject.cards.each do |c| %></h2>
+<h2><% @cards.each do |c| %></h2>
     <% if c.user_id == current_user.id %>
       <div class="card_holder">
         <h2 id="front"><%= c.front %></h2>
@@ -13,6 +12,6 @@
       <% end %>
   <% end %>
 <br>
+<button class="js-next" data-id="<%=@cards.first%>">Study!</button>
+
 <br>
-  <%= link_to 'Study!', subject_card_path(@subject.id, @subject.cards.first.id), :method => :get %><br><br>
-  <%= link_to = button_to('New Card', new_card_path) %>

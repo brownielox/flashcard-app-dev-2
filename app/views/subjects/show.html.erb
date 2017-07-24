@@ -1,0 +1,11 @@
+<br>
+<br>
+<%= render 'nav' %>
+
+<h2><%="#{current_user.email}"%>'s subjects</h2>
+<ul>
+  <h2><%= link_to "#{@subject.name}", subject_cards_path(@subject) %></h2>
+_______________________________________________
+
+</ul>
+<%= link_to = button_to('New Card', new_card_path) %>

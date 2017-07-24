@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170527182705) do
+ActiveRecord::Schema.define(version: 20170724184833) do
 
   create_table "cards", force: :cascade do |t|
     t.string   "front"

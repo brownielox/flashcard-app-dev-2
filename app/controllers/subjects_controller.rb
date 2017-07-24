@@ -2,13 +2,20 @@ class SubjectsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @subjects = User.find_by_id(current_user.id).subjects
+    @subjects = current_user.subjects.uniq
+    # @subject = Subject.find(params[:id])
+    respond_to do |format|
+      format.html { render :index }
+      format.json { render json: @subjects}
+    end
   end
 
   def show
     @subject = Subject.find(params[:id])
-    @card = Card.where(:subject_id => @subject.id).first
-    redirect_to new_card_path
+    respond_to do |format|
+      format.html { render :show }
+      format.json { render json: @subject}
+    end
   end
 
   def create

@@ -5,6 +5,7 @@
 <%= form_for :subject, url: subjects_path do |f| %>
   <%= f.label :name %><br>
   <%= f.text_field :name %>
+  <%= f.user_id :current_user.id %>
       <%= f.submit %>
     <p>
 <% end %>
