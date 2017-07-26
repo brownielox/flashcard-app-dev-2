@@ -1,29 +1,52 @@
+var cardsBySubject
+
 $(document).on('turbolinks:load', function() {
-  console.log('doc is ready')
+
+  $.get(`${window.location.href}.json`, function(cards_returned_by_ajax){
+    console.log(cards_returned_by_ajax);
+    cardsBySubject = cards_returned_by_ajax;
+    loadCards();
+    // hideCards();
+    attachFlipCard();
+  })
   // ADD DESCRIPTION
 
-  loadCards();
-  attachFlipCard();
   $("#subjects_button").click(function() {
     showSubjects();
   });
   $("#study_button").click(function() {
-    studyCard();
+    studyCard(0);
   });
 })
 
-
 function loadCards() {
-  $(".card_holder").find(".back").hide();
-  $(".card_holder").find(".front").show();
+  cardsBySubject.forEach(function(c){
+    $("#study_main").append(`<div class="card_holder"><h2 class="front">${c.front}</h2><h2 class="back">${c.back}</h2></div>`);
+  });
 }
 
-function studyCard() {
+// function hideCards() {
+//   $(".card_holder").find(".back").hide();
+//   $(".card_holder").find(".front").show();
+// }
+
+function studyCard(i) {
+  // cardsBySubject.forEach(function(c){
+  //   $("#study_main").append(`<div class="card_holder"><h2 class="front">${c.front}</h2><h2 class="back">${c.back}</h2></div>`).first();
+  // });
+  var c = cardsBySubject[i];
   $("#study_main").html("");
-  $("#study_main").append(`<a href=subjects/${subject.id}/cards/${card.id}><p id="card_front">${card.front}</p></a>`);
+  $("#study_main").append(`<div class="card_holder"><h2 class="front">${c.front}</h2><h2 class="back">${c.back}</h2></div>`);
+  // hideCards();
+  attachFlipCard();
 }
+
+  // .next()
+
 
 function attachFlipCard() {
+  $(".card_holder").find(".back").hide();
+  $(".card_holder").find(".front").show();
   $('.card_holder').click(function() {
     if ($(this).find(".front").is(":visible")) {
       $(this).find(".front").hide();
@@ -42,7 +65,9 @@ function attachFlipCard() {
       $("#subjects_button").hide();
       $("#main").html("");
       subjects_json_from_api_request.forEach(function(subject){
-      $("#main").append(`<a href=subjects/${subject.id}/cards><p id="subject_name">${subject.name}</p></a>`);
+        $("#main").append(`<a href=subjects/${subject.id}/cards><p id=${subject.id}>${subject.name}</p></a>`);
+        $(`#${subject.id}`).click(function() {
+        });
       });
     });
   };
