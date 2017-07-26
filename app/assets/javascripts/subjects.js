@@ -1,4 +1,5 @@
 var cardsBySubject
+var currentIndex = 0
 
 $(document).on('turbolinks:load', function() {
 
@@ -14,9 +15,30 @@ $(document).on('turbolinks:load', function() {
   $("#subjects_button").click(function() {
     showSubjects();
   });
+
   $("#study_button").click(function() {
-    studyCard(0);
+    studyCard(currentIndex);
+    $("#study_button").hide();
   });
+
+  $("#next_button").click(function() {
+    currentIndex += 1;
+    if (currentIndex === cardsBySubject.length) {
+      currentIndex = 0;
+    }
+    studyCard(currentIndex);
+  });
+
+  $("#random_button").click(function() {
+    currentIndex = Math.floor((Math.random() * cardsBySubject.length));
+    studyCard(currentIndex);
+  });
+
+  $("#back_button").click(function() {
+    loadCards();
+    // $("#study_button").hide();
+  });
+
 })
 
 function loadCards() {
