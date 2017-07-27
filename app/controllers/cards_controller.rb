@@ -10,9 +10,6 @@ class CardsController < ApplicationController
   end
 
   def show
-    # subjects = Subject.all
-    # card = Card.find(params[:id])
-    # render json: card.to_json
     @subject = Subject.find(params[:subject_id])
     @card = (Subject.find(params[:subject_id])).cards.find(params[:id])
     respond_to do |format|
@@ -34,10 +31,11 @@ class CardsController < ApplicationController
   end
 
   def create
-    @card = Card.create(card_params)
-    @card.user_id = current_user.id
-    @card.save
-    redirect_to new_card_path
+    card = Card.create(card_params)
+    card.user_id = current_user.id
+    card.save
+    render json: card, status: 201
+    # redirect_to new_card_path
   end
 
   def update
@@ -57,7 +55,7 @@ class CardsController < ApplicationController
 
   private
     def card_params
-      params.require(:card).permit(:subject_name, :front, :back, :user_id)
+      params.permit(:subject_id, :front, :back, :user_id)
     end
 
     def set_cards

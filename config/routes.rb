@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   resources :subjects, only: [:show, :index] do
     # nested resource for posts
-    resources :cards, only: [:show, :index]
+    resources :cards, only: [:show, :index,  :new, :create]
   end
 
     # root 'home#index'
@@ -15,5 +15,8 @@ Rails.application.routes.draw do
   post 'subjects/new' => 'subjects#new'
   post 'cards/new' => 'cards#new'
   post 'subjects' => 'subjects#index'
+  post 'cards/create' => 'cards#create'
+
+
 
 end

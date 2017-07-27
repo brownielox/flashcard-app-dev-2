@@ -46,6 +46,14 @@
     color: black;
 }
 
+.new_card_holder
+{
+    width: 250px;
+    border: 5px solid black;
+    border-radius: 8px;
+    display: inline-block;
+}
+
 .navbar
 {
   position: fixed;
