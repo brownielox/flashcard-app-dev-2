@@ -28,12 +28,26 @@
     font-weight: normal;
 }
 
-.card_holder
+.card_holder, .new_card_holder
 {
     width: 250px;
+    height: 100px;
+    margin: 5px;
     border: 5px solid black;
     border-radius: 8px;
     display: inline-block;
+    box-shadow: 5px 5px 10px #888888;
+}
+
+.card_holder:hover, .new_card_holder:hover
+{
+    width: 250px;
+    height: 100px;
+    margin: 5px;
+    border: 5px solid black;
+    border-radius: 8px;
+    display: inline-block;
+    box-shadow: none;
 }
 
 .card_holder h2, .card_holder h3
@@ -46,12 +60,8 @@
     color: black;
 }
 
-.new_card_holder
-{
-    width: 250px;
-    border: 5px solid black;
-    border-radius: 8px;
-    display: inline-block;
+.back {
+  color: blue;
 }
 
 .navbar

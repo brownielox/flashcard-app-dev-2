@@ -6,11 +6,11 @@ var current_subject_id
 
 $(document).on('turbolinks:load', function() {
   $.get(`${window.location.href}.json`, function(cards_returned_by_ajax){
-    console.log(cards_returned_by_ajax);
     cardsBySubject = cards_returned_by_ajax;
     loadCards();
     // hideCards();
     attachFlipCard();
+    $(".new_card_holder").hide();
   })
   // ADD DESCRIPTION
 
@@ -44,6 +44,10 @@ $(document).on('turbolinks:load', function() {
     // $("#study_button").hide();
   });
 
+  $("#new_card_button").click(function() {
+    $(".new_card_holder").show();
+  });
+
 })
 
 function loadCards() {
@@ -53,17 +57,14 @@ function loadCards() {
   });
   $("#study_main").append(`
     <div class="new_card_holder">
-    <form class="back">
-    <div class="new_card_holder">
+    <form class="form">
     <input type=hidden id="subject_name" label="language" value="${current_subject.id}">
-    <br>
     Front:<br>
     <input type="text" id="front" label="front"><br>
     Back:<br>
     <input type="text" id="back" label="back">
     <input type="submit" id="save" value="save">
     </form>
-    <h2 class="front">Make a New Card</h2>
     </div>`)
     $("#save").click(function(event) {
       event.preventDefault();
@@ -82,9 +83,18 @@ function loadCards() {
           back: new_back
         },
       }).done(function() {
-        $("#study_main").html("");
-        loadCards();
-        attachFlipCard();
+        $.get(`${window.location.href}.json`, function(cards_returned_by_ajax){
+          cardsBySubject = cards_returned_by_ajax;
+          loadCards();
+          // hideCards();
+          attachFlipCard();
+        }).done(function() {
+          $("#study_main").html("");
+          loadCards();
+          attachFlipCard();
+          $(".new_card_holder").hide();
+
+        })
       })
     })
   }
