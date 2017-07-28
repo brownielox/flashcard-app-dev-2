@@ -8,22 +8,17 @@ $(document).on('turbolinks:load', function() {
   $.get(`${window.location.href}.json`, function(cards_returned_by_ajax){
     cardsBySubject = cards_returned_by_ajax;
     loadCards();
-    // hideCards();
     attachFlipCard();
     $(".new_card_holder").hide();
-  })
+  });
   // ADD DESCRIPTION
 
   $("#subjects_button").click(function() {
     showSubjects();
   });
 
-  $("#study_button").click(function() {
-    studyCard(currentIndex);
-    $("#study_button").hide();
-  });
-
   $("#next_button").click(function() {
+    $("#new_card_button").hide();
     currentIndex += 1;
     if (currentIndex === cardsBySubject.length) {
       currentIndex = 0;
@@ -31,7 +26,18 @@ $(document).on('turbolinks:load', function() {
     studyCard(currentIndex);
   });
 
+  $("#previous_button").click(function() {
+    $("#new_card_button").hide();
+    currentIndex -= 1;
+    if (currentIndex === 0) {
+      currentIndex = cardsBySubject.length - 1;
+    }
+    studyCard(currentIndex);
+  });
+
+
   $("#random_button").click(function() {
+    $("#new_card_button").hide();
     currentIndex = Math.floor((Math.random() * cardsBySubject.length));
     studyCard(currentIndex);
   });
@@ -39,9 +45,8 @@ $(document).on('turbolinks:load', function() {
   $("#back_button").click(function() {
     $("#study_main").html("");
     loadCards();
+    $(".new_card_holder").hide();
     attachFlipCard();
-
-    // $("#study_button").hide();
   });
 
   $("#new_card_button").click(function() {
@@ -50,15 +55,42 @@ $(document).on('turbolinks:load', function() {
 
 })
 
+function grabCards() {
+  $.get(`${window.location.href}.json`, function(cards_returned_by_ajax){
+    cardsBySubject = cards_returned_by_ajax;
+    loadCards();
+    attachFlipCard();
+  }).done(function() {
+    $("#study_main").html("");
+    loadCards();
+    attachFlipCard();
+    $(".new_card_holder").hide();
+  })
+}
+
 function loadCards() {
-  $('#subject_name').html(current_subject.name)
+  $('#subject_name').html(current_subject.name + " deck")
+  $("#previous_button").hide();
+  $("#new_card_button").show();
   cardsBySubject.forEach(function(c){
-    $("#study_main").append(`<div class="card_holder"><h2 class="front">${c.front}</h2><h2 class="back">${c.back}</h2></div>`);
+    $("#study_main").append(`<div class="card_holder"><h2 class="front">${c.front}</h2><h2 class="back">${c.back}</h2><div class=mouse_button><a href="/cards/${c.id}/edit"><button>Edit</button></a><button id="delete_${c.id}">Delete</button></div>
+    </div>`);
+    $(`#delete_${c.id}`).click(function(event){
+      $.ajax({
+        type: 'DELETE',
+        url: `/cards/${c.id}`,
+        success: function() {
+          grabCards();
+          console.log('Success')
+        }
+      });
+    });
   });
+
   $("#study_main").append(`
     <div class="new_card_holder">
     <form class="form">
-    <input type=hidden id="subject_name" label="language" value="${current_subject.id}">
+    <input type=hidden id="subject__name" label="language" value="${current_subject.id}">
     Front:<br>
     <input type="text" id="front" label="front"><br>
     Back:<br>
@@ -83,18 +115,17 @@ function loadCards() {
           back: new_back
         },
       }).done(function() {
-        $.get(`${window.location.href}.json`, function(cards_returned_by_ajax){
-          cardsBySubject = cards_returned_by_ajax;
-          loadCards();
-          // hideCards();
-          attachFlipCard();
-        }).done(function() {
-          $("#study_main").html("");
-          loadCards();
-          attachFlipCard();
-          $(".new_card_holder").hide();
-
-        })
+        grabCards();
+        // $.get(`${window.location.href}.json`, function(cards_returned_by_ajax){
+        //   cardsBySubject = cards_returned_by_ajax;
+        //   loadCards();
+        //   attachFlipCard();
+        // }).done(function() {
+        //   $("#study_main").html("");
+        //   loadCards();
+        //   attachFlipCard();
+        //   $(".new_card_holder").hide();
+        // })
       })
     })
   }
@@ -108,15 +139,13 @@ function loadCards() {
     // cardsBySubject.forEach(function(c){
     //   $("#study_main").append(`<div class="card_holder"><h2 class="front">${c.front}</h2><h2 class="back">${c.back}</h2></div>`).first();
     // });
+    $("#previous_button").show();
     var c = cardsBySubject[i];
     $("#study_main").html("");
     $("#study_main").append(`<div class="card_holder"><h2 class="front">${c.front}</h2><h2 class="back">${c.back}</h2></div>`);
     // hideCards();
     attachFlipCard();
   }
-
-  // .next()
-
 
   function attachFlipCard() {
     $(".card_holder").find(".back").hide();
@@ -147,30 +176,3 @@ function loadCards() {
       });
     });
   };
-
-  // function newCard(){
-  //   $(".card_holder").html(subject_name_var)
-  //   cardsBySubject.forEach(function(c){
-  //     $("#study_main").append(`<div class="card_holder"><h2 class="front">${c.front}</h2><h2 class="back">${c.back}</h2></div>`);
-  //   });
-  // }
-
-  // function flipCard() {
-  //   $.get(`/subjects/${id}/cards`, function(server_response){
-  //     server_response.forEach(function(card){
-  //       var f = `<div id=${card.id} class="card_holder"><div class="front">${card.front}</div><div class="back">${card.back}</div></div>`;
-  //       $("body").append(f);
-  //       $(".back").hide();
-  //       $(`#${card.id}`).click(function() {
-  //         if ($(this).find(".front").is(":visible")) {
-  //           $(this).find(".front").hide();
-  //           $(this).find(".back").show();
-  //         }
-  //         else {
-  //           $(this).find(".back").hide();
-  //           $(this).find(".front").show();
-  //         }
-  //       });
-  //     })
-  //   })
-  // }
