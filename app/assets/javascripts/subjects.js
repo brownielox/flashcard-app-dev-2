@@ -4,7 +4,17 @@ var current_subject
 var data = []
 var current_subject_id
 
+function Card(front, back, id) {
+  this.front = front;
+  this.back = back;
+  this.id = id;
+  this.createCardHTML = function(){return `<div class="card_holder"><h2 class="front">${this.front}</h2><h2 class="back">${this.back}</h2>
+  <div class=mouse_button><button id="delete_${this.id}">Delete</button></div>
+  </div>`};
+}
+
 $(document).on('turbolinks:load', function() {
+  showSubjects();
   $.get(`${window.location.href}.json`, function(cards_returned_by_ajax){
     cardsBySubject = cards_returned_by_ajax;
     loadCards();
@@ -13,9 +23,8 @@ $(document).on('turbolinks:load', function() {
   });
   // ADD DESCRIPTION
 
-  $("#subjects_button").click(function() {
-    showSubjects();
-  });
+  // $("#subjects_button").click(function() {
+  // });
 
   $("#next_button").click(function() {
     $("#new_card_button").hide();
@@ -28,10 +37,13 @@ $(document).on('turbolinks:load', function() {
 
   $("#previous_button").click(function() {
     $("#new_card_button").hide();
-    currentIndex -= 1;
     if (currentIndex === 0) {
       currentIndex = cardsBySubject.length - 1;
     }
+    else {
+      currentIndex -= 1;
+    }
+
     studyCard(currentIndex);
   });
 
@@ -73,8 +85,11 @@ function loadCards() {
   $("#previous_button").hide();
   $("#new_card_button").show();
   cardsBySubject.forEach(function(c){
-    $("#study_main").append(`<div class="card_holder"><h2 class="front">${c.front}</h2><h2 class="back">${c.back}</h2><div class=mouse_button><a href="/cards/${c.id}/edit"><button>Edit</button></a><button id="delete_${c.id}">Delete</button></div>
-    </div>`);
+
+    var card = new Card(c.front, c.back, c.id);
+
+
+    $("#study_main").append(card.createCardHTML());
     $(`#delete_${c.id}`).click(function(event){
       $.ajax({
         type: 'DELETE',
@@ -139,10 +154,12 @@ function loadCards() {
     // cardsBySubject.forEach(function(c){
     //   $("#study_main").append(`<div class="card_holder"><h2 class="front">${c.front}</h2><h2 class="back">${c.back}</h2></div>`).first();
     // });
+    // console.log(i);
     $("#previous_button").show();
     var c = cardsBySubject[i];
+    var newCard = new Card(c.front, c.back, c.id)
     $("#study_main").html("");
-    $("#study_main").append(`<div class="card_holder"><h2 class="front">${c.front}</h2><h2 class="back">${c.back}</h2></div>`);
+    $("#study_main").append(newCard.createCardHTML());
     // hideCards();
     attachFlipCard();
   }
@@ -165,8 +182,9 @@ function loadCards() {
 
   function showSubjects(){
     $.get(`/subjects.json`, function(subjects_json_from_api_request){
-      $("#subjects_button").hide();
+      // $("#subjects_button").hide();
       $("#main").html("");
+      $("#main").append('<h2>Welcome to Flash/Card</h2>')
       subjects_json_from_api_request.forEach(function(subject){
         $("#main").append(`<a href=subjects/${subject.id}/cards><p id=${subject.id}>${subject.name}</p></a>`);
         $(`#${subject.id}`).click(function() {

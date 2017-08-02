@@ -26,9 +26,13 @@ class CardsController < ApplicationController
   def new
   end
 
-  def edit
-    @card = Card.find(params[:id])
-  end
+  # def edit
+  #   @card = Card.find(params[:id])
+  #   respond_to do |format|
+  #     format.html { render :edit }
+  #     format.json { render json: @card}
+  #   end
+  # end
 
   def create
     card = Card.create(card_params)
