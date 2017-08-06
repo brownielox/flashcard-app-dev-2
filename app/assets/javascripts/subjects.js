@@ -1,8 +1,9 @@
-var cardsBySubject
+var state = {
+  cardsBySubject
 var currentIndex = 0
 var current_subject
 var data = []
-var current_subject_id
+var currentSubjectId
 
 function Card(front, back, id) {
   this.front = front;
@@ -14,17 +15,8 @@ function Card(front, back, id) {
 }
 
 $(document).on('turbolinks:load', function() {
-  showSubjects();
-  $.get(`${window.location.href}.json`, function(cards_returned_by_ajax){
-    cardsBySubject = cards_returned_by_ajax;
-    loadCards();
-    attachFlipCard();
-    $(".new_card_holder").hide();
-  });
-  // ADD DESCRIPTION
-
-  // $("#subjects_button").click(function() {
-  // });
+  //retrieving cards for single subject
+  showSubjects(grabCardsBySubject);
 
   $("#next_button").click(function() {
     $("#new_card_button").hide();
@@ -32,7 +24,7 @@ $(document).on('turbolinks:load', function() {
     if (currentIndex === cardsBySubject.length) {
       currentIndex = 0;
     }
-    studyCard(currentIndex);
+    studyCard(findcurrentIndex);
   });
 
   $("#previous_button").click(function() {
@@ -66,6 +58,32 @@ $(document).on('turbolinks:load', function() {
   });
 
 })
+
+var CardService = {
+
+  getCards: function(subjectId, callback){
+    return $.get(`/subjects/${subjectId}/cards.json`)
+      .done(function(cards) {
+        return callback(cards);
+      });
+  },
+
+  getCard: function(callback){
+
+  },
+
+  deleteCard: function(callback){
+
+  },
+
+  createCard: function(callback){
+
+  },
+
+  updateCard: function(callback){
+
+  }
+}
 
 function grabCards() {
   $.get(`${window.location.href}.json`, function(cards_returned_by_ajax){
@@ -117,50 +135,35 @@ function loadCards() {
       event.preventDefault();
       var new_front = $('#front').val();
       var new_back = $('#back').val();
-      // console.log(new_front);
-      // console.log(new_back);
       $.ajax({
         type: 'POST',
         url: '/cards',
         data: {
-          // subject_id: 1,
-          // user_id: 1,
-          subject_id: current_subject_id,
+          subject_id: d,
           front: new_front,
           back: new_back
         },
       }).done(function() {
         grabCards();
-        // $.get(`${window.location.href}.json`, function(cards_returned_by_ajax){
-        //   cardsBySubject = cards_returned_by_ajax;
-        //   loadCards();
-        //   attachFlipCard();
-        // }).done(function() {
-        //   $("#study_main").html("");
-        //   loadCards();
-        //   attachFlipCard();
-        //   $(".new_card_holder").hide();
-        // })
       })
     })
   }
 
-  // function hideCards() {
-  //   $(".card_holder").find(".back").hide();
-  //   $(".card_holder").find(".front").show();
-  // }
+  var grabCardsBySubject = function() {
+    $.get(`${window.location.href}.json`, function(cards_returned_by_ajax){
+      cardsBySubject = cards_returned_by_ajax;
+      loadCards();
+      attachFlipCard();
+      $(".new_card_holder").hide();
+    });
+  }
 
   function studyCard(i) {
-    // cardsBySubject.forEach(function(c){
-    //   $("#study_main").append(`<div class="card_holder"><h2 class="front">${c.front}</h2><h2 class="back">${c.back}</h2></div>`).first();
-    // });
-    // console.log(i);
     $("#previous_button").show();
     var c = cardsBySubject[i];
     var newCard = new Card(c.front, c.back, c.id)
     $("#study_main").html("");
     $("#study_main").append(newCard.createCardHTML());
-    // hideCards();
     attachFlipCard();
   }
 
@@ -180,17 +183,19 @@ function loadCards() {
   }
 
 
-  function showSubjects(){
+  function showSubjects(callback){
     $.get(`/subjects.json`, function(subjects_json_from_api_request){
-      // $("#subjects_button").hide();
       $("#main").html("");
       $("#main").append('<h2>Welcome to Flash/Card</h2>')
       subjects_json_from_api_request.forEach(function(subject){
         $("#main").append(`<a href=subjects/${subject.id}/cards><p id=${subject.id}>${subject.name}</p></a>`);
         $(`#${subject.id}`).click(function() {
           current_subject = subject
-          current_subject_id = subject.id
+          currentSubjectId = subject.id
         });
       });
+      callback();
     });
   };
+
+  //test to push to git
