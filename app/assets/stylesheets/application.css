@@ -81,6 +81,7 @@
 
 .back {
   color: blue;
+  display: none;
 }
 
 .navbar

@@ -1,175 +1,130 @@
+/////////////state & data///////////////
 var state = {
-  cardsBySubject
-var currentIndex = 0
-var current_subject
-var data = []
-var currentSubjectId
+currentSubjectId: null,
+subjects: null,
+currentIndex: 0,
+current_subject: null,
+data: [],
+userSubjects: null,
+}
 
+function getUserData(callback){
+  $.get(`/subjects.json`, function(all_info){
+    state.subjects = all_info;
+    callback();
+  })
+};
+
+
+///////////show a card//////////////
 function Card(front, back, id) {
   this.front = front;
   this.back = back;
   this.id = id;
-  this.createCardHTML = function(){return `<div class="card_holder"><h2 class="front">${this.front}</h2><h2 class="back">${this.back}</h2>
-  <div class=mouse_button><button id="delete_${this.id}">Delete</button></div>
-  </div>`};
-}
-
-$(document).on('turbolinks:load', function() {
-  //retrieving cards for single subject
-  showSubjects(grabCardsBySubject);
-
-  $("#next_button").click(function() {
-    $("#new_card_button").hide();
-    currentIndex += 1;
-    if (currentIndex === cardsBySubject.length) {
-      currentIndex = 0;
-    }
-    studyCard(findcurrentIndex);
-  });
-
-  $("#previous_button").click(function() {
-    $("#new_card_button").hide();
-    if (currentIndex === 0) {
-      currentIndex = cardsBySubject.length - 1;
-    }
-    else {
-      currentIndex -= 1;
-    }
-
-    studyCard(currentIndex);
-  });
+  this.createCardHTML = function() {
+    return `<div class="card_holder">
+      <h2 class="front">${this.front}</h2>
+      <h2 class="back">${this.back}</h2>
+      <div class=mouse_button><button id="delete_${this.id}">Delete</button></div>
+      </div>`
+    };
+  }
 
 
-  $("#random_button").click(function() {
-    $("#new_card_button").hide();
-    currentIndex = Math.floor((Math.random() * cardsBySubject.length));
-    studyCard(currentIndex);
-  });
+/////////////on load///////////////
 
-  $("#back_button").click(function() {
-    $("#study_main").html("");
-    loadCards();
-    $(".new_card_holder").hide();
-    attachFlipCard();
-  });
-
-  $("#new_card_button").click(function() {
-    $(".new_card_holder").show();
-  });
-
+$('document').ready(function() {
+  getUserData(showSubjects);
 })
 
-var CardService = {
-
-  getCards: function(subjectId, callback){
-    return $.get(`/subjects/${subjectId}/cards.json`)
-      .done(function(cards) {
-        return callback(cards);
-      });
-  },
-
-  getCard: function(callback){
-
-  },
-
-  deleteCard: function(callback){
-
-  },
-
-  createCard: function(callback){
-
-  },
-
-  updateCard: function(callback){
-
-  }
-}
-
-function grabCards() {
-  $.get(`${window.location.href}.json`, function(cards_returned_by_ajax){
-    cardsBySubject = cards_returned_by_ajax;
-    loadCards();
-    attachFlipCard();
-  }).done(function() {
-    $("#study_main").html("");
-    loadCards();
-    attachFlipCard();
-    $(".new_card_holder").hide();
-  })
-}
-
-function loadCards() {
-  $('#subject_name').html(current_subject.name + " deck")
-  $("#previous_button").hide();
-  $("#new_card_button").show();
-  cardsBySubject.forEach(function(c){
-
-    var card = new Card(c.front, c.back, c.id);
 
 
-    $("#study_main").append(card.createCardHTML());
-    $(`#delete_${c.id}`).click(function(event){
-      $.ajax({
-        type: 'DELETE',
-        url: `/cards/${c.id}`,
-        success: function() {
-          grabCards();
-          console.log('Success')
-        }
+/////////show subjects on index///////////
+
+  function showSubjects(){
+    $("#main").html("");
+    $("#main").append('<h2>Welcome to Flash/Card</h2>')
+    state.subjects.forEach(function(subject){
+      $("#main").append(`<p id=${subject.name}>${subject.name}</p>`);
+      $(`#${subject.name}`).click(function() {
+        state.current_subject = subject
+        CardService.getCards(subject, function(){});
       });
     });
-  });
-
-  $("#study_main").append(`
-    <div class="new_card_holder">
-    <form class="form">
-    <input type=hidden id="subject__name" label="language" value="${current_subject.id}">
-    Front:<br>
-    <input type="text" id="front" label="front"><br>
-    Back:<br>
-    <input type="text" id="back" label="back">
-    <input type="submit" id="save" value="save">
-    </form>
-    </div>`)
-    $("#save").click(function(event) {
-      event.preventDefault();
-      var new_front = $('#front').val();
-      var new_back = $('#back').val();
-      $.ajax({
-        type: 'POST',
-        url: '/cards',
-        data: {
-          subject_id: d,
-          front: new_front,
-          back: new_back
-        },
-      }).done(function() {
-        grabCards();
-      })
-    })
   }
 
-  var grabCardsBySubject = function() {
-    $.get(`${window.location.href}.json`, function(cards_returned_by_ajax){
-      cardsBySubject = cards_returned_by_ajax;
-      loadCards();
-      attachFlipCard();
-      $(".new_card_holder").hide();
-    });
+
+
+//////////////////card service///////////////////
+  var CardService = {
+
+    getCards: function(subject, callback){
+      $("#main").html("");
+          subject.cards.forEach((card) =>{
+            let c = new Card(card.front, card.back, card.id);
+            $("#main").append(c.createCardHTML());
+          });
+          $("#previous_button").hide();
+          $("#new_card_button").show();
+          addButtons();
+          turnOverCard();
+      },
+
+    getCard: function(subject, cardId, callback){
+      $("#main").html("");
+          subject.cards.cardId((card) =>{
+            let c = new Card(card.front, card.back, card.id);
+            $("#main").append(c.createCardHTML());
+          });
+          $("#previous_button").hide();
+          $("#new_card_button").show();
+          addButtons();
+          turnOverCard();
+      },
+
+    deleteCard: function(subjectId, cardId, callback){
+      return $.delete(`/subjects/${subjectId}/cards/${cardId}.json`)
+        .done((card) => {
+          return callback();
+        });
+      },
+
+    createNewCard: function(subject_id, front, back, callback){
+      var card = new Card(front, back, c.id);
+      $("#study_main").append(card.createCardHTML());
+          $.ajax({
+            type: 'POST',
+            url: '/card',
+            data: {
+              subject_id: subject_id,
+              front: front,
+              back: back
+            }
+          })
+        // .done(return callback());
+      // });
+    },
+
+    updateCard: function(callback){
+      return $.patch(`/subjects/${subjectId}/cards/${cardId}.json`)
+        .done((card) => {
+          return callback(card);
+        });
+    }
   }
 
-  function studyCard(i) {
+
+
+//////////study actions/////////
+  function flipCard(i) {
     $("#previous_button").show();
     var c = cardsBySubject[i];
     var newCard = new Card(c.front, c.back, c.id)
     $("#study_main").html("");
     $("#study_main").append(newCard.createCardHTML());
-    attachFlipCard();
   }
 
-  function attachFlipCard() {
-    $(".card_holder").find(".back").hide();
-    $(".card_holder").find(".front").show();
+  function turnOverCard() {
     $('.card_holder').click(function() {
       if ($(this).find(".front").is(":visible")) {
         $(this).find(".front").hide();
@@ -182,20 +137,45 @@ function loadCards() {
     });
   }
 
+/////////////buttons///////////////
 
-  function showSubjects(callback){
-    $.get(`/subjects.json`, function(subjects_json_from_api_request){
-      $("#main").html("");
-      $("#main").append('<h2>Welcome to Flash/Card</h2>')
-      subjects_json_from_api_request.forEach(function(subject){
-        $("#main").append(`<a href=subjects/${subject.id}/cards><p id=${subject.id}>${subject.name}</p></a>`);
-        $(`#${subject.id}`).click(function() {
-          current_subject = subject
-          currentSubjectId = subject.id
-        });
-      });
-      callback();
+  function addButtons() {
+    $("#next_button").click(function() {
+      $("#new_card_button").hide();
+      currentIndex += 1;
+      if (currentIndex === cardsBySubject.length) {
+        currentIndex = 0;
+      }
+      studyCard(findcurrentIndex);
     });
-  };
 
-  //test to push to git
+    $("#previous_button").click(function() {
+      $("#new_card_button").hide();
+      if (currentIndex === 0) {
+        currentIndex = cardsBySubject.length - 1;
+      }
+      else {
+        currentIndex -= 1;
+      }
+
+      studyCard(currentIndex);
+    });
+
+
+    $("#random_button").click(function() {
+      $("#new_card_button").hide();
+      currentIndex = Math.floor((Math.random() * cardsBySubject.length));
+      studyCard(currentIndex);
+    });
+
+    $("#back_button").click(function() {
+      $("#study_main").html("");
+      loadCards();
+      $(".new_card_holder").hide();
+      flipCard();
+    });
+
+    $("#new_card_button").click(function() {
+      $(".new_card_holder").show();
+    });
+  }

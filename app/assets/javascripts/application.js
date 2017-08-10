@@ -13,5 +13,4 @@
 //= require jquery
 //= require subjects
 //= require jquery_ujs
-//= require turbolinks
 //= require_tree .
