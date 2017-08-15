@@ -4,19 +4,17 @@ var state = {
   currentIndex: 0,
   currentSubject: null,
   data: [],
-  view: "aSubject"
+  view: "aSubject",
+  userId: null
 }
-
 function getUserData(callback){
-  $.get(`/subjects.json`, function(all_info){
-    state.subjects = all_info;
+  $.get(`/subjects.json`, function(allInfo){
+    state.subjects = allInfo;
     callback();
   })
 };
-
 /////////////show a card/////////////
-
-function Card(front, back, id) {
+function Card(front, back, id, callback) {
   this.front = front;
   this.back = back;
   this.id = id;
@@ -28,103 +26,11 @@ function Card(front, back, id) {
     </div>`
   };
 }
-
 /////////////on load/////////////
-
 $('document').ready(function() {
   getUserData(showSubjects);
   addButtons();
-})
-
-/////////////show subjects on index/////////////
-
-function showSubjects(){
-  $("#main").html("");
-  $("#main").append('<h2>Welcome to Flash/Card</h2>')
-  state.subjects.forEach(function(subject){
-    $("#main").append(`<p id=${subject.name}>${subject.name}</p>`);
-    $(`#${subject.name}`).click(function() {
-      state.currentSubject = subject
-      CardService.getCards(subject, function(){});
-    });
-  });
-}
-
-/////////////card service/////////////
-var CardService = {
-
-  getCards: function(subject, callback){
-    $("#main").html("");
-    subject.cards.forEach((card) =>{
-      let c = new Card(card.front, card.back, card.id);
-      $("#main").append(c.createCardHTML());
-    });
-    $("#new_card_button").show();
-    turnOverCard();
-    state.view = "aSubject"
-  },
-
-  getCard: function(subject, cardIndex, callback){
-    $("#main").html("");
-    var card = subject.cards[cardIndex]
-    let c = new Card(card.front, card.back, card.id);
-    $("#main").append(c.createCardHTML());
-    $("#new_card_button").show();
-    turnOverCard();
-    state.view = "aCard"
-  },
-
-  deleteCard: function(subjectId, cardId, callback){
-    return $.delete(`/subjects/${subjectId}/cards/${cardId}.json`)
-    .done((card) => {
-      return callback();
-    });
-  },
-
-  newCardForm: function(){
-    console.log("hellow orl");
-    $("#main").append(`
-      <div class="new_card_holder">
-      <form class="back">
-      <div class="new_card_holder">
-      <input type=hidden id="subject_name" label="language" value="${state.currentSubject.id}">
-      <br>
-      Front:<br>
-      <input type="text" id="front" label="front"><br>
-      Back:<br>
-      <input type="text" id="back" label="back">
-      <input type="submit" id="save" value="save">
-      </form>
-      <h2 class="front">Make a New Card</h2>
-      </div>`)
-  },
-
-  createNewCard: function(subject_id, front, back, callback){
-    var card = new Card(front, back, c.id);
-    $("#study_main").append(card.createCardHTML());
-    $.ajax({
-      type: 'POST',
-      url: '/card',
-      data: {
-        subject_id: subject_id,
-        front: front,
-        back: back
-      }
-    })
-  },
-
-  updateCard: function(callback){
-    return $.patch(`/subjects/${subjectId}/cards/${cardId}.json`)
-    .done((card) => {
-      return callback(card);
-    });
-  }
-}
-
-/////////////study actions/////////////
-
-function turnOverCard() {
-  $('.card_holder').click(function() {
+  $(document).on('click', '.card_holder', function(event){
     if ($(this).find(".front").is(":visible")) {
       $(this).find(".front").hide();
       $(this).find(".back").show();
@@ -134,10 +40,116 @@ function turnOverCard() {
       $(this).find(".front").show();
     }
   });
+})
+/////////////show subjects on index/////////////
+function showSubjects(){
+  $("#main").html("");
+  $("#header_div").html("");
+  $("#main").append('<h2>Welcome to Flash/Card</h2>')
+  state.subjects.forEach(function(subject){
+    $("#main").append(`<p id=${subject.name}>${subject.name}</p>`);
+    $(`#${subject.name}`).click(function() {
+      state.currentSubject = subject
+      CardService.getCards(subject, function(){});
+    });
+  });
+  $(".phase0").show();
+  $(".phase1, .phase2, .phase3").hide();
 }
 
-/////////////buttons/////////////
+function createNewSubject() {
+  $("#main").append(`
+    <div id="new_subject">
+    Subject:<br><input type="text" id="name" label="Subject"><br>
+    <input type="submit" id="save" value="save">
+    </form>
+    </div>`);
+    $("#save").click(function(){
+      var name = $("#name").val();
+      state.subjects.push({"name": name, "cards": []});
+      $.ajax({
+        type: 'POST',
+        url: `/subjects`,
+        data: {
+          name: name
+        }
+      })
+      showSubjects();
+    });
+  }
+/////////////card service/////////////
+var CardService = {
 
+  getCards: function(subject, callback){
+    $("#main").html("");
+    $("#header_div").html(`${subject.name} cards`);
+    subject.cards.forEach((card) =>{
+      let c = new Card(card.front, card.back, card.id);
+      $("#main").append(c.createCardHTML());
+      $(`#delete_${card.id}`).click(function(){
+        var subjectId = state.currentSubject.id;
+        var cardId = `${card.id}`;
+        CardService.deleteCard(subjectId, cardId, function(){});
+        $(this).parent().parent().remove();
+      })
+    });
+    $("#new_card_button").show();
+    state.view = "aSubject"
+    $(".phase0, .phase3").hide();
+    $(".phase1, .phase2").show();
+  },
+
+  getCard: function(subject, cardIndex, callback){
+    $("#main").html("");
+    var card = subject.cards[cardIndex]
+    let c = new Card(card.front, card.back, card.id);
+    $("#main").append(c.createCardHTML());
+    $("#new_card_button").show();
+    state.view = "aCard"
+    $(".phase0, .phase2").hide();
+    $(".phase1, .phase3").show();
+  },
+
+  deleteCard: function(subjectId, cardId, callback){
+    $.ajax({
+      type: 'DELETE',
+      url: `/subjects/${subjectId}/cards/${cardId}.json`,
+    })
+  },
+
+  newCardForm: function(){
+    $("#main").append(`
+      <div class="new_holder card_holder">
+      <input type=hidden id="subjectId" label="language" value="${state.currentSubject.id}"><br>
+      Front:<br><input type="text" id="front" label="front"><br>
+      Back:<br><input type="text" id="back" label="back">
+      <input type="submit" id="save" value="save">
+      </form>
+      </div>`);
+      $("#save").click(function(){
+        var subjectId = $("#subjectId").val();
+        var front = $("#front").val();
+        var back = $("#back").val();
+        CardService.createNewCard(subjectId, front, back, function(){})
+        $(".new_holder").remove();
+      });
+  },
+
+  createNewCard: function(subjectId, front, back, callback){
+    var card = new Card(front, back, subjectId);
+    $("#main").append(card.createCardHTML());
+    $.ajax({
+      type: 'POST',
+      url: `/subjects/${subjectId}/cards`,
+      data: {
+        subject_id: subjectId,
+        front: front,
+        back: back,
+      }
+    })
+  },
+}
+/////////////buttons/////////////
 function addButtons() {
   $("#study_button").click(function() {
     CardService.getCard(state.currentSubject, state.currentIndex, function(){});
@@ -184,5 +196,9 @@ function addButtons() {
 
   $("#new_card_button").click(function() {
     CardService.newCardForm();
+  });
+
+  $("#new_subject_button").click(function() {
+    createNewSubject();
   });
 }

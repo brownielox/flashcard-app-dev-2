@@ -39,7 +39,7 @@
     font-weight: normal;
 }
 
-.card_holder, .new_card_holder
+.card_holder, .new_holder
 {
     width: 250px;
     height: 120px;
@@ -50,15 +50,15 @@
     box-shadow: 5px 5px 10px #888888;
 }
 
-.new_card_holder{
-  display: block;
+.new_holder{
+  display: inline-block;
 }
 
 .card_holder:hover .mouse_button {
   opacity: 1;
 }
 
-.card_holder:hover, .new_card_holder:hover
+.card_holder:hover
 {
     width: 250px;
     height: 120px;
@@ -82,6 +82,11 @@
 .back {
   color: blue;
   display: none;
+}
+
+.phase0, .phase1, .phase2, .phase3{
+  display: inline-block;
+  margin-bottom: 10px;
 }
 
 .navbar
@@ -133,13 +138,7 @@
   display: inline-block;
 }
 
-/*
-h2
-{
-    color: black;
+#header_div {
+  padding-top: 40px;
+  font-size: 20px;
 }
-h2:hover
-{
-    text-decoration: none;
-    color: transparent;
-}*/

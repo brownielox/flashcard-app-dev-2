@@ -5,8 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, :omniauth_providers => [:facebook]
 
-  has_many :cards
-  has_many :subjects, through: :cards
+  has_many :subjects
+  has_many :cards, through: :subjects
 
 
 end

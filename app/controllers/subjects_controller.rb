@@ -2,7 +2,8 @@ class SubjectsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @subjects = current_user.subjects.uniq
+    @subjects = current_user.subjects
+    # @subjects = current_user.subjects.uniq
     # @subject = Subject.find(params[:id])
     respond_to do |format|
       format.html { render :index }
@@ -19,10 +20,10 @@ class SubjectsController < ApplicationController
   end
 
   def create
-    @subject = Subject.new(subject_params)
-    @subject.user_id = current_user.id
-    @subject.save
-    redirect_to @subject
+    subject = Subject.create(subject_params)
+    subject.user_id = current_user.id
+    subject.save
+    render json: subject, status: 201
   end
 
   def new
@@ -36,16 +37,13 @@ class SubjectsController < ApplicationController
 
   def cards
     @subject = Subject.find(params[:id])
-
-    # Note that because ids are unique by table we can go directly to
-    # Post.find — no need for @author.posts.find...
     @card = Card.find(params[:card_id])
     render template: 'cards/show'
   end
 
   private
     def subject_params
-      params.require(:subject).permit(:name, :user_id)
+      params.permit(:name, :user_id)
     end
 
 end
