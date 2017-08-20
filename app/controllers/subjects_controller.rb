@@ -3,8 +3,6 @@ class SubjectsController < ApplicationController
 
   def index
     @subjects = current_user.subjects
-    # @subjects = current_user.subjects.uniq
-    # @subject = Subject.find(params[:id])
     respond_to do |format|
       format.html { render :index }
       format.json { render json: @subjects}

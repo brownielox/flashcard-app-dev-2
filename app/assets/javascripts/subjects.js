@@ -137,6 +137,11 @@ var CardService = {
 
   createNewCard: function(subjectId, front, back, callback){
     var card = new Card(front, back, subjectId);
+    state.currentSubject.cards.push({
+      id: subjectId,
+      front: front,
+      back: back
+    });
     $("#main").append(card.createCardHTML());
     $.ajax({
       type: 'POST',
