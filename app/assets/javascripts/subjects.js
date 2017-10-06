@@ -14,18 +14,27 @@ function getUserData(callback){
   })
 };
 /////////////show a card/////////////
-function Card(front, back, id, callback) {
-  this.front = front;
-  this.back = back;
-  this.id = id;
-  this.createCardHTML = function() {
+//function Card(front, back, id, callback) {
+
+//}
+
+const Card = {
+  init(front, back, id ) {
+    this.front = front;
+    this.back = back;
+    this.id = id;
+  },
+
+  createCardHTML() {
     return `<div class="card_holder">
     <h2 class="front">${this.front}</h2>
     <h2 class="back">${this.back}</h2>
     <div class=mouse_button><button id="delete_${this.id}">Delete</button></div>
     </div>`
-  };
+  }
 }
+
+Card.prototype
 /////////////on load/////////////
 $('document').ready(function() {
   getUserData(showSubjects);
@@ -102,7 +111,7 @@ var CardService = {
   getCard: function(subject, cardIndex, callback){
     $("#main").html("");
     var card = subject.cards[cardIndex]
-    let c = new Card(card.front, card.back, card.id);
+    let c = Card.init(card.front, card.back, card.id);
     $("#main").append(c.createCardHTML());
     $("#new_card_button").show();
     state.view = "aCard"
