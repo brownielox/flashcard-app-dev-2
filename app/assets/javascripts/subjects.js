@@ -93,7 +93,7 @@ var CardService = {
     $("#main").html("");
     $("#header_div").html(`${subject.name} cards`);
     subject.cards.forEach((card) =>{
-      let c = new Card(card.front, card.back, card.id);
+      let c = Card.new(card.front, card.back, card.id);
       $("#main").append(c.createCardHTML());
       $(`#delete_${card.id}`).click(function(){
         var subjectId = state.currentSubject.id;
@@ -145,6 +145,7 @@ var CardService = {
   },
 
   createNewCard: function(subjectId, front, back, callback){
+    console.log(Card)
     var card = new Card(front, back, subjectId);
     state.currentSubject.cards.push({
       id: subjectId,
