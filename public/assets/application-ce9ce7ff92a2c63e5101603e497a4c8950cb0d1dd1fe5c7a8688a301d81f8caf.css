@@ -1,0 +1,145 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+
+
+ */
+
+ a {
+   text-decoration: none;
+ }
+
+ a:hover {
+   text-decoration: underline;
+ }
+
+ .mouse_button {
+   opacity: 0;
+   height: 20px;
+   width: 100px;
+   margin: 0 auto;
+ }
+
+ .mouse_button button {
+   margin-left: 20px;
+ }
+
+ h3
+{
+    text-decoration: none;
+    color: transparent;
+    font-weight: normal;
+}
+
+.card_holder, .new_holder
+{
+    width: 250px;
+    height: 120px;
+    margin: 5px;
+    border: 5px solid black;
+    border-radius: 8px;
+    display: inline-block;
+    box-shadow: 5px 5px 10px #888888;
+}
+
+.new_holder{
+  display: inline-block;
+}
+
+.card_holder:hover .mouse_button {
+  opacity: 1;
+}
+
+.card_holder:hover
+{
+    width: 250px;
+    height: 120px;
+    margin: 5px;
+    border: 5px solid black;
+    border-radius: 8px;
+    display: inline-block;
+    box-shadow: none;
+}
+
+.card_holder h2, .card_holder h3
+{
+    text-align: center;
+}
+
+.card_holder:hover h3
+{
+    color: black;
+}
+
+.back {
+  color: blue;
+  display: none;
+}
+
+.phase0, .phase1, .phase2, .phase3{
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.navbar
+{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  margin: 0;
+  background-color: grey;
+  left: 0;
+  height: 25px;
+}
+
+.navbar a:first-child{
+    position: fixed;
+    color: white;
+    padding-top: 2px;
+    left: 20px;
+}
+
+.navbar a:last-child
+{
+  position: fixed;
+  right: 20px;
+  color: white;
+  padding-top: 2px;
+}
+
+.navbar1
+{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  margin: 0;
+  background-color: grey;
+  left: 0;
+  height: 25px;
+}
+
+.navbar1 a:first-child
+{
+  position: fixed;
+  right: 20px;
+  color: white;
+  padding-top: 2px;
+}
+
+.links * {
+  display: inline-block;
+}
+
+#header_div {
+  padding-top: 40px;
+  font-size: 20px;
+}

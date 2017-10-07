@@ -8,7 +8,7 @@ var state = {
   userId: null
 }
 function getUserData(callback){
-  $.get(`/subjects.json`, function(allInfo){
+  $.get("/subjects.json", function(allInfo){
     state.subjects = allInfo;
     callback();
   })
